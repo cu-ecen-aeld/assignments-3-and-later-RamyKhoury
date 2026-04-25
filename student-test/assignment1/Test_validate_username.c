@@ -20,7 +20,8 @@ void test_validate_my_username()
      */
 
     const char* expected = my_username();
-    const char* actual = malloc_username_from_conf_file();
+    char* actual = malloc_username_from_conf_file();
 
-    TEST_ASSERT_EQUAL_STRING_MESSAGE(expected, actual, "Test is successful!!\n");
+    TEST_ASSERT_EQUAL_STRING_MESSAGE(expected, actual, "Error: expected username and actual username do not match!!\n");
+    free(actual);
 }
