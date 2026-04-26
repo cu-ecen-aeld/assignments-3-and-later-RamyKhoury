@@ -5,7 +5,7 @@ SRCS= writer.c
 OBJS = build/writer.o
 TARGET = writer
 
-all: $(TARGET) file_type_get
+all: $(TARGET)
 
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
