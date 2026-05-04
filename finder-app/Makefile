@@ -17,4 +17,4 @@ build/%.o: %.c
 clean:
 	@rm -rf build
 	@rm -rf writer
-	@echo "Cleaning ./finder-app/build"
+	@echo "Cleaning ./finder-app/build and ./finder-app/writer"
