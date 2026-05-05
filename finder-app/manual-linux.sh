@@ -80,19 +80,16 @@ make CONFIG_PREFIX=$OUTDIR/rootfs ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} in
 make CONFIG_PREFIX=/home/rkhoury/courses/advanced_embedded_linux/rootfs ARCH=arm64 CROSS_COMPILE=aarch64-none-linux-gnu- install
 
 echo "Library dependencies"
-${CROSS_COMPILE}readelf -a /bin/busybox | grep "program interpreter"
-${CROSS_COMPILE}readelf -a /bin/busybox | grep "Shared library"
+${CROSS_COMPILE}readelf -a ${OUTDIR}/rootfs/bin/busybox | grep "program interpreter"
+${CROSS_COMPILE}readelf -a ${OUTDIR}/rootfs/bin/busybox | grep "Shared library"
 
 # TODO: Add library dependencies to rootfs
-cp /usr/aarch64-linux-gnu/lib/ld-linux-aarch64.so.1 $OUTDIR/rootfs/lib64/
-cp /usr/aarch64-linux-gnu/lib/libm.so.6 $OUTDIR/rootfs/lib64/
-cp /usr/aarch64-linux-gnu/lib/libresolv.so.2 $OUTDIR/rootfs/lib64/
-cp /usr/aarch64-linux-gnu/lib/libc.so.6 $OUTDIR/rootfs/lib64/
-
-cp /usr/aarch64-linux-gnu/lib/ld-linux-aarch64.so.1 $OUTDIR/rootfs/lib/
-cp /usr/aarch64-linux-gnu/lib/libm.so.6 $OUTDIR/rootfs/lib/
-cp /usr/aarch64-linux-gnu/lib/libresolv.so.2 $OUTDIR/rootfs/lib/
-cp /usr/aarch64-linux-gnu/lib/libc.so.6 $OUTDIR/rootfs/lib/
+SYSROOT=$(${CROSS_COMPILE}gcc --print-sysroot)
+echo "SYSROOT is ${SYSROOT}"
+cp -a ${SYSROOT}/lib/ld-linux-aarch64.so.1 ${OUTDIR}/rootfs/lib
+cp -a ${SYSROOT}/lib64/libm.so.6 ${OUTDIR}/rootfs/lib64
+cp -a ${SYSROOT}/lib64/libc.so.6 ${OUTDIR}/rootfs/lib64
+cp -a ${SYSROOT}/lib64/libresolv.so.2 ${OUTDIR}/rootfs/lib64
 
 # TODO: Make device nodes
 cd "$OUTDIR/rootfs"
@@ -106,6 +103,7 @@ make CROSS_COMPILE=aarch64-none-linux-gnu-
 
 # TODO: Copy the finder related scripts and executables to the /home directory
 # on the target rootfs
+cd ${FINDER_APP_DIR}
 cp ./finder.sh $OUTDIR/rootfs/home/
 cp ./finder-test.sh $OUTDIR/rootfs/home/
 cp ./autorun-qemu.sh $OUTDIR/rootfs/home/
