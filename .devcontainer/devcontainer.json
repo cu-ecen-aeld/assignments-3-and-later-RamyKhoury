@@ -1,0 +1,32 @@
+{
+    "name": "CU AESD DinD Environment",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": "."
+    },
+    
+    // CRITICAL: True Docker-in-Docker requires privileged access to run the inner daemon
+    "runArgs": [
+        "--privileged"
+    ],
+
+    "mounts": [
+        "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
+    ],
+
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "bash"
+            },
+            // Automatically installs essential extensions inside the container environment
+            "extensions": [
+                "ms-vscode.cpptools",         // Crucial for AESD C/C++ development
+                "ms-azuretools.vscode-docker"    // Allows you to manage inner containers easily
+            ]
+        }
+    },
+
+    // Default to root user as expected by the base assignment images
+    "remoteUser": "root"
+}
