@@ -23,6 +23,4 @@ jobs:
           - name: Checkout submodules
             run : git submodule update --init --recursive
           - name: Run full test
-            run: apt-get update -y
-            run: apt-get install -y netcat
-            run: ./full-test.sh
+            run: apt-get update -y && apt-get install -y netcat && ./full-test.sh
