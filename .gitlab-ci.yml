@@ -16,6 +16,8 @@ test:
     stage: test
     script:
         - cd ${CI_PROJECT_DIR}
+        - apt-get update -y
+        - apt-get install -y netcat
         - ./assignment-autotest/docker/docker-run-test.sh
 
     artifacts:
