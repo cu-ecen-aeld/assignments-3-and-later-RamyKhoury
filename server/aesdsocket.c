@@ -28,10 +28,10 @@ void signal_handler(int signal)
                 perror("Could not delete the file");
             }
 
-        // if (server_info != NULL)
-        // {
-        //     freeaddrinfo(server_info);
-        // }
+        if (server_info != NULL)
+        {
+            freeaddrinfo(server_info);
+        }
 
         if (server_fd != -1)
         {
@@ -165,6 +165,8 @@ int main(int argc, char **argv)
         freeaddrinfo(server_info);
         exit(1);
     }
+
+    freeaddrinfo(server_info); // Safe to free after binding
 
     if (listen(server_fd, 10) < 0)
     {
