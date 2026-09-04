@@ -43,12 +43,18 @@ void signal_handler(int signal)
         void *result;
         struct Client *np;
         pthread_mutex_lock(&list_lock);
-        SLIST_FOREACH(np, &c_head, clients)
+        np = SLIST_FIRST(&c_head);
+        while (np != NULL)
         {
+            struct Client *next = SLIST_NEXT(np, clients);
+
             if (pthread_join(np->thread, &result))
             {
                 perror("while joining completed thread");
             }
+            free(np);
+
+            np = next;
         }
         pthread_mutex_unlock(&list_lock);
 
@@ -307,8 +313,11 @@ int main(int argc, char **argv)
         struct Client *np;
 
         pthread_mutex_lock(&list_lock);
-        SLIST_FOREACH(np, &c_head, clients)
+        np = SLIST_FIRST(&c_head);
+        while (np != NULL)
         {
+            struct Client *next = SLIST_NEXT(np, clients);
+
             if (np->completed)
             {
                 if (pthread_join(np->thread, &result))
@@ -316,7 +325,10 @@ int main(int argc, char **argv)
                     perror("while joining completed thread");
                 }
                 SLIST_REMOVE(&c_head, np, Client, clients);
+                free(np);
             }
+
+            np = next;
         }
         pthread_mutex_unlock(&list_lock);
 
