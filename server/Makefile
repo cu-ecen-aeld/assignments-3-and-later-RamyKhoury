@@ -9,11 +9,11 @@ LDFLAGS ?= -lpthread -lrt
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) $(LDFLAGS)
 
 build/%.o: %.c
 	@mkdir -p build
-	$(CC) $(CFLAGS) $^ -o $@ $(INCLUDES) $(LDFLAGS)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	@rm -rf build
